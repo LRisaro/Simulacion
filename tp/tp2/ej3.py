@@ -20,3 +20,25 @@
 # Entonces los puntos de equilibrio del sistema son:
 ######################################################
 # (xeq, yeq, zeq) = (0, 0, zeq), para todo zeq que pertenece a los reales
+#
+
+def dinSystem(p, times):
+  o = p
+  for i in range(0, times):
+    x = (o[0] + 2*o[1]) / 2
+    y = o[1] - o[0]/2
+    z = o[2] - o[0] - o[1]
+    o = [x, y, z]
+    print(o)
+
+x = [-1, 0, 1]
+y = [-1, 0, 1]
+z = [-1, 0, 1]
+
+for i in x:
+  for j in y:
+    for u in z:
+      # print(x[i], y[j], z[u])
+      currentP = [x[i], y[j], z[u]]
+      print("Calculando iteraciones para: ",currentP)
+      dinSystem(currentP, 100)
