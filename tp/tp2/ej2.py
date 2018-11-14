@@ -16,6 +16,8 @@ currentState = [1, 0, 0]
 stateCount = [0, 0, 0]
 solCount = 0
 stateNum = 1
+solTime = 0
+stateChangeCount = 0
 for i in range(0, stateChangeQ):
   print('En estado ', stateNum, ':')
   stateCount[stateNum-1] += 1
@@ -24,13 +26,16 @@ for i in range(0, stateChangeQ):
   probValues = d.tolist()[0]
   prob = np.random.uniform(0, 1)
   # print(probValues)
+  prevStateNum = stateNum
   if (prob <= probValues[0]):
     stateNum = 1
     currentState = [1, 0, 0]
+    solTime += 10
   elif (prob <= (probValues[0] + probValues[1])):
     stateNum = 2
     currentState = [0, 1, 0]
     solCount += 1
+    solTime += 10
   else:
     stateNum = 3
     currentState = [0, 0, 1]
@@ -38,8 +43,13 @@ for i in range(0, stateChangeQ):
       solCount -= 1
       print('Solicitud procesada')
   print('')
-
-print('En estado ', stateNum)
-stateCount[stateNum-1] += 1
-print(solCount, ' solicitudes en cola a los ', i*10, ' milisegundos')
-print('Cantidad de veces en cada estado', stateCount)
+  if (prevStateNum != stateNum):
+    stateChangeCount += 1
+  if (stateChangeCount == 30):
+    print('Se llego al limite de cambios de estado posibles (30)')
+    print('Cantidad de veces en cada estado', stateCount)
+    print('Porcentaje de tiempo que el servidor no procesa solicitudes ', (solTime / ((i+10)*10))*100, '%')
+    break
+if (stateChangeCount < 30):
+  print('Cantidad de veces en cada estado', stateCount)
+  print('Porcentaje de tiempo que el servidor no procesa solicitudes ', (solTime / (stateChangeQ*10))*100, '%')
